@@ -1,26 +1,401 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ===== HAGANE V3 — Ghost of Tsushima palette ===== */
+@theme {
+  /* Base canvas */
+  --color-sumi: #0a0908;
+  --color-washi: #f5ecd9;
+  --color-ash: #1a1614;
+  --color-charcoal: #0f0c0a;
+
+  /* Warm Tsushima accents */
+  --color-blood: #b8341a;
+  --color-ember: #e2521e;
+  --color-sunset: #d4422e;
+  --color-blade: #c9a961;
+  --color-gold: #e8c171;
+  --color-kintsugi: #d9a55b;
+
+  /* Cool depths */
+  --color-fog: #3a3a3f;
+  --color-mist: #a8a497;
+  --color-steel: #5b5b62;
+  --color-indigo: #1a3b5c;
+  --color-night: #3a2b4a;
+
+  /* Naturals */
+  --color-bamboo: #5f6b51;
+  --color-sakura: #d8b1bd;
+
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-kanji: var(--font-noto-serif-jp), serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --ease-blade: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-ink: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ===== Base ===== */
+html {
+  background: var(--color-sumi);
+}
+body {
+  color: var(--color-washi);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: transparent;
+  overflow-x: hidden;
+  cursor: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+::selection {
+  background: var(--color-ember);
+  color: var(--color-sumi);
+}
+
+/* ===== Custom scrollbar — thin gold blade ===== */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-sumi);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-blade), var(--color-blood));
+  border-radius: 0;
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-blade) var(--color-sumi);
+}
+
+/* ===== Portal stage layers ===== */
+.portal-layer {
+  position: absolute;
+  inset: -4%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+  transform-origin: 50% 48%;
+  backface-visibility: hidden;
+}
+
+/* ===== Paper grain (wabi-sabi) ===== */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+  z-index: 5;
+}
+
+/* ===== Kanji oversized decorative ===== */
+.kanji-anchor {
+  font-family: var(--font-kanji);
+  color: var(--color-blade);
+  opacity: 0.12;
+  font-weight: 900;
+  line-height: 0.85;
+  user-select: none;
+  letter-spacing: -0.04em;
+  text-shadow: 0 0 80px rgba(232, 193, 113, 0.18);
+}
+
+/* ===== Typography art system ===== */
+.display-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 0.92;
+  text-shadow: 0 2px 24px rgba(10, 9, 8, 0.7);
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.86;
+  text-shadow:
+    0 4px 28px rgba(10, 9, 8, 0.8),
+    0 0 60px rgba(184, 52, 26, 0.18);
+}
+
+/* Outlined ghost text — for oversized backdrops behind filled headlines */
+.text-outline {
+  -webkit-text-stroke: 1.5px rgba(232, 193, 113, 0.28);
+  color: transparent;
+  text-shadow: none;
+}
+
+/* Gold-leaf sheen fill */
+.text-gold-sheen {
+  background: linear-gradient(
+    110deg,
+    #c9a961 0%,
+    #f5e6c4 38%,
+    #fff3d6 50%,
+    #e8c171 62%,
+    #c9a961 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 7s ease-in-out infinite;
+}
+@keyframes sheen {
+  0%, 100% { background-position: 0% 0; }
+  50% { background-position: 100% 0; }
+}
+
+/* Vertical Japanese rail */
+.vertical-jp {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: var(--font-kanji);
+  font-weight: 700; /* nearest loaded Noto Serif JP face (500 trimmed) */
+  letter-spacing: 0.6em;
+}
+
+/* Chapter marker */
+.chapter-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-blade);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.chapter-label::before {
+  content: "";
+  display: inline-block;
+  width: 2.4rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-blade), transparent);
+}
+
+/* Mono labels */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+.eyebrow-mist {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+}
+
+/* ===== Brush-stroke form fields (no boxes) ===== */
+.brush-field {
+  position: relative;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-steel) 55%, transparent);
+  border-radius: 0;
+  padding: 0.85rem 0.25rem 0.7rem;
+  color: var(--color-washi);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  width: 100%;
+  transition: border-color 0.45s var(--ease-blade);
+  outline: none;
+}
+.brush-field::placeholder {
+  color: color-mix(in srgb, var(--color-mist) 55%, transparent);
+  font-style: italic;
+}
+.brush-field:focus {
+  border-bottom-color: var(--color-gold);
+}
+/* Ink-bleed underline that draws on focus */
+.brush-wrap {
+  position: relative;
+}
+.brush-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-blade), var(--color-ember) 80%, transparent);
+  transition: width 0.7s var(--ease-blade);
+  pointer-events: none;
+}
+.brush-wrap:focus-within::after {
+  width: 100%;
+}
+
+select.brush-field {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23c9a961' stroke-width='1.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.4rem center;
+  cursor: none;
+}
+select.brush-field option {
+  background: var(--color-ash);
+  color: var(--color-washi);
+}
+
+/* Hanko seal button */
+.hanko {
+  position: relative;
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #d4422e, #8b2a2a 75%);
+  color: var(--color-washi);
+  font-family: var(--font-kanji);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.15rem;
+  box-shadow:
+    0 0 0 1px rgba(212, 66, 46, 0.4),
+    0 8px 40px rgba(184, 52, 26, 0.35),
+    inset 0 0 24px rgba(10, 9, 8, 0.35);
+  transition: transform 0.4s var(--ease-blade), box-shadow 0.4s var(--ease-blade);
+  border: none;
+}
+.hanko:hover {
+  transform: rotate(-4deg) scale(1.04);
+  box-shadow:
+    0 0 0 1px rgba(212, 66, 46, 0.6),
+    0 12px 56px rgba(184, 52, 26, 0.5),
+    inset 0 0 24px rgba(10, 9, 8, 0.35);
+}
+.hanko:active {
+  transform: rotate(-2deg) scale(0.94);
+}
+.hanko:disabled {
+  opacity: 0.55;
+  transform: none;
+}
+
+/* ===== Blade-slice on cards =====
+   Elements marked data-slice react when a swift cursor stroke crosses
+   them: a gold seam flashes along the cut angle and the card flinches.
+   JS (SlashFX) sets --sx/--sy (cut point, %), --sa (angle), --fx/--fy
+   (flinch px) and toggles .slice-hit. */
+[data-slice] {
+  position: relative;
+}
+.slice-hit {
+  animation: sliceFlinch 0.3s var(--ease-blade);
+}
+.slice-hit::after {
+  content: "";
+  position: absolute;
+  left: var(--sx, 50%);
+  top: var(--sy, 50%);
+  width: 150%;
+  height: 2px;
+  pointer-events: none;
+  z-index: 60;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #fff3d6 35%,
+    var(--color-gold) 50%,
+    #fff3d6 65%,
+    transparent
+  );
+  box-shadow: 0 0 18px rgba(232, 193, 113, 0.85), 0 0 42px rgba(226, 82, 30, 0.4);
+  transform-origin: center;
+  animation: sliceSeam 0.5s ease-out forwards;
+}
+@keyframes sliceFlinch {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  30% { transform: translate(var(--fx, 2px), var(--fy, -2px)) rotate(var(--fr, 0.4deg)); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+@keyframes sliceSeam {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--sa, -20deg)) scaleX(0);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--sa, -20deg)) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--sa, -20deg)) scaleX(1);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* The scar that stays. A dark open slit with faint gold edges — the card
+   remains cut until the page is reborn. JS appends one per strike. */
+.blade-scar {
+  position: absolute;
+  width: 126%;
+  height: 3px;
+  pointer-events: none;
+  z-index: 55;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(10, 9, 8, 0.85) 18%,
+    rgba(10, 9, 8, 0.95) 50%,
+    rgba(10, 9, 8, 0.85) 82%,
+    transparent 100%
+  );
+  border-top: 1px solid rgba(232, 193, 113, 0.22);
+  border-bottom: 1px solid rgba(10, 9, 8, 0.6);
+  box-shadow:
+    0 1px 2px rgba(10, 9, 8, 0.5),
+    0 -1px 6px rgba(232, 193, 113, 0.08);
+  animation: scarOpen 0.4s var(--ease-blade) forwards;
+}
+@keyframes scarOpen {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--scar-a, -20deg)) scaleX(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--scar-a, -20deg)) scaleX(1);
+  }
+}
+
+/* ===== Lenis ===== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  body {
+    cursor: auto;
+  }
 }

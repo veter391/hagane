@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# cloudflare / opennext build output
+/.open-next/
+/.wrangler/
+workers/**/.wrangler/
+
+# source asset originals (PNG masters, ~100MB - WebP derivatives ship in public/)
+/asset-src/

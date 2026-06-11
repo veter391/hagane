@@ -1,0 +1,19 @@
+name = "hagane-contact"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+workers_dev = true
+keep_vars = true
+
+# Delivery is via Resend (same provider as the shypot.com portfolio site;
+# the shypot.com sender domain is already verified there).
+#
+# Secrets to set once (owner runs these, values never touch the repo):
+#   npx wrangler secret put RESEND_API_KEY   --name hagane-contact
+#   npx wrangler secret put CONTACT_TO_EMAIL --name hagane-contact
+#
+# Until both are set the worker accepts briefs and logs them (visible via
+# `wrangler tail hagane-contact`), returning delivered:false — the site
+# form still shows success, nothing is lost silently in production logs.
+
+[vars]
+RESEND_FROM = "Hagane Forge <forge@shypot.com>"
