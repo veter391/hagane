@@ -4,13 +4,13 @@ compatibility_date = "2026-06-01"
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 keep_vars = true
 
+routes = [
+  { pattern = "hagane.shypot.com", custom_domain = true },
+]
+
 [assets]
 directory = ".open-next/assets"
 binding = "ASSETS"
 
 [observability]
 enabled = true
-
-routes = [
-  { pattern = "hagane.shypot.com", custom_domain = true },
-]
