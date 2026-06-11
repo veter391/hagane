@@ -128,6 +128,7 @@ export function Hero() {
 
         <div className="max-w-[72rem]" style={{ perspective: 900 }}>
           <h1
+            data-slice
             className="hero-headline text-washi"
             style={{ fontSize: "clamp(3.4rem, 9.5vw, 11rem)" }}
           >
